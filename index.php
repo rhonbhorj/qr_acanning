@@ -91,7 +91,13 @@
   <div id="reader"></div>
   <div id="result">Result: <span id="decoded"></span></div>
 
-  <audio id="successSound">
+ 
+ <audio id="successSound">
+    <source src="successfully_login.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+ <audio id="successfullylogout">
     <source src="successfully_logout.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
@@ -105,6 +111,7 @@
 
   <script>
     const successSound = document.getElementById("successSound");
+    const successfullylogout = document.getElementById("successfullylogout");
     const modal = document.getElementById("successModal");
     const modalText = document.getElementById("modalText");
     const decodedDisplay = document.getElementById("decoded");
@@ -138,7 +145,21 @@
       .then(response => response.json())
       .then(data => {
         console.log("API Response:", data.code);
-        showModal("Scan Sent Successfully!"+data.code);
+
+     
+ 
+      if(data.code==100){
+          successSound.currentTime = 0;
+          successSound.play().catch(err => console.warn("Audio play blocked:", err))
+          showModal("Scan Sent Successfully!"+data.code);
+        }else{
+          successfullylogout.currentTime = 0;
+          successfullylogout.play().catch(err => console.warn("Audio play blocked:", err))
+          showModal("Scan Sent Successfully!"+data.code);
+        }
+
+
+        
       })
       .catch(error => {
         console.error("Error sending to API:", error);
@@ -151,9 +172,7 @@
       isScanning = false;
 
       decodedDisplay.innerText = decodedText;
-
-      successSound.currentTime = 0;
-      successSound.play().catch(err => console.warn("Audio play blocked:", err));
+;
 
       // ✅ Call API here
       sendToAPI(decodedText);
