@@ -119,11 +119,31 @@
       modalText.innerText = text;
       modal.style.display = "flex";
 
-      // Hide modal after 2 seconds but **do not reload** page
       setTimeout(() => {
         modal.style.display = "none";
         isScanning = true; // allow scanning again
+         location.reload();
       }, 2000);
+    }
+
+    // ✅ AJAX Call using Fetch
+    function sendToAPI(companyId) {
+      fetch("https://192.168.100.4/ngsattendance/qrscan/scan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ companyId: companyId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("API Response:", data.code);
+        showModal("Scan Sent Successfully!"+data.code);
+      })
+      .catch(error => {
+        console.error("Error sending to API:", error);
+        showModal("Error sending data!");
+      });
     }
 
     function onScanSuccess(decodedText) {
@@ -135,8 +155,8 @@
       successSound.currentTime = 0;
       successSound.play().catch(err => console.warn("Audio play blocked:", err));
 
-      // Keep camera running, just show modal
-      showModal(decodedText);
+      // ✅ Call API here
+      sendToAPI(decodedText);
     }
 
     function onScanFailure(error) {
