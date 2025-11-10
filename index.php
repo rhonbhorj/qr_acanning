@@ -156,7 +156,7 @@
             modal.style.display = "none";
             isScanning = true; // allow scanning again
             location.reload();
-        }, 300000);
+        }, 4000);
     }
 
     // ✅ AJAX Call using Fetch
@@ -180,22 +180,19 @@
                     successSound.currentTime = 0;
                     successSound.play().catch(err => console.warn("Audio play blocked:", err))
                     showModal("Scan Sent Successfully!" + data.code);
-                }
-                elseif(data.code == 203) {
+                } else if (data.code == 203) {
                     already_login.currentTime = 0;
                     already_login.play().catch(err => console.warn("Audio play blocked:", err))
                     showModal("You have already timed in." + data.code);
-                }
-                elseif(data.code == 222) {
+                } else if (data.code == 222) {
                     successfullylogout.currentTime = 0;
                     successfullylogout.play().catch(err => console.warn("Audio play blocked:", err))
                     showModal("Successfully timed out." + data.code);
 
 
-                }
-                elseif(data.code == 223) {
+                } else if (data.code == 223) {
                     already_logout.currentTime = 0;
-                    successalready_logoutfullylogout.play().catch(err => console.warn("Audio play blocked:",
+                    already_logout.play().catch(err => console.warn("Audio play blocked:",
                         err))
                     showModal("You have already timed out." + data.code);
 
@@ -215,6 +212,15 @@
                 showModal("Error sending data!");
             });
     }
+
+
+
+
+
+
+
+
+
 
     function onScanSuccess(decodedText) {
         if (!isScanning) return;
